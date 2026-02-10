@@ -1,13 +1,12 @@
-const { default: flattenColorPalette } = require("tailwindcss/lib/util/flattenColorPalette");
+import type { Config } from "tailwindcss";
 
-/** @type {import('tailwindcss').Config} */
 export default {
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}"
+    "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -19,6 +18,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        display: ["Syne", "sans-serif"],
+        body: ["Outfit", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -53,16 +56,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -71,198 +64,29 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
-        "move-up": {
-          "0%, 100%": {
-            transform: "translateY(0)",
-          },
-          "50%": {
-            transform: "translateY(-10px)",
-          },
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
         },
-        "shimmer": {
-          from: {
-            backgroundPosition: "0 0",
-          },
-          to: {
-            backgroundPosition: "-200% 0",
-          },
-        },
+        "fade-in": {
+            from: { opacity: "0", transform: "translateY(10px)" },
+            to: { opacity: "1", transform: "translateY(0)" }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "move-up": "move-up 3s ease-in-out infinite",
-        "shimmer": "shimmer 2s linear infinite",
-      },
-      backgroundSize: {
-        "200%": "200% 200%",
-        "300%": "300% 300%",
-      },
-      backgroundPosition: {
-        "right": "right",
-        "left": "left",
-        "center": "center",
+        marquee: "marquee 20s linear infinite",
+        "fade-in": "fade-in 0.6s ease-out forwards",
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), addAceternityPlugins],
-};
-
-// This plugin enables the use of arbitrary color values in background-gradient and similar Aceternity components
-function addAceternityPlugins({ matchUtilities, theme }: any) {
-  matchUtilities(
-    {
-      "bg-grid": (value: any) => ({
-        backgroundImage: `url("${value}")`,
-      }),
-    },
-    {
-      values: theme("spacing"),
-    }
-  );
-
-  matchUtilities(
-    {
-      "bg-dot": (value: any) => ({
-        backgroundImage: `url("${value}")`,
-      }),
-    },
-    {
-      values: theme("spacing"),
-    }
-  );
-
-  matchUtilities(
-    {
-      "bg-gradient": (value: any) => ({
-        backgroundImage: `url("${value}")`,
-      }),
-    },
-    {
-      values: theme("spacing"),
-    }
-  );
-
-  matchUtilities(
-    {
-      "bg-size": (value: any) => ({
-        backgroundSize: value,
-      }),
-    },
-    {
-      values: theme("backgroundSize"),
-    }
-  );
-
-  matchUtilities(
-    {
-      "bg-position": (value: any) => ({
-        backgroundPosition: value,
-      }),
-    },
-    {
-      values: theme("backgroundPosition"),
-    }
-  );
-
-  matchUtilities(
-    {
-      "bg-clip": (value: any) => ({
-        WebkitBackgroundClip: value,
-        backgroundClip: value,
-      }),
-    },
-    {
-      values: theme("backgroundClip"),
-    }
-  );
-
-  matchUtilities(
-    {
-      "bg-origin": (value: any) => ({
-        backgroundOrigin: value,
-      }),
-    },
-    {
-      values: theme("backgroundOrigin"),
-    }
-  );
-  
-  matchUtilities(
-    {
-      "text-shadow": (value: any) => ({
-        textShadow: value,
-      }),
-    },
-    {
-      values: theme("textShadow"),
-    }
-  );
-
-  matchUtilities(
-    {
-      "bg-opacity": (value: any) => ({
-        opacity: value,
-      }),
-    },
-    {
-      values: theme("opacity"),
-    }
-  );
-
-  matchUtilities(
-    {
-      "bg-blend": (value: any) => ({
-        backgroundBlendMode: value,
-      }),
-    },
-    {
-      values: theme("backgroundBlendMode"),
-    }
-  );
-
-  matchUtilities(
-    {
-      "bg-mask": (value: any) => ({
-        WebkitMaskImage: value,
-        maskImage: value,
-      }),
-    },
-    {
-      values: theme("backgroundMaskImage"),
-    }
-  );
-  
-  // This line is the key for background gradient utilities (e.g., bg-gradient-to-r from-blue-500/0 via-blue-500/50 to-blue-500/0)
-  matchUtilities(
-    {
-      "bg-gradient-color-stop": (value: any) => ({
-        "--tw-gradient-from": value,
-        "--tw-gradient-via": value,
-        "--tw-gradient-to": value,
-      }),
-    },
-    {
-      values: flattenColorPalette(theme("colors")),
-      type: "color",
-    }
-  );
-}
-
-// NOTE: We rely on the UXEngineer agent to also write the 'cn.ts' utility file.
-
+  plugins: [require("tailwindcss-animate")],
+} satisfies Config;
